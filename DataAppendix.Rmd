@@ -1,0 +1,88 @@
+---
+title: "SDS 291 - Data Appendix"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Loading data
+
+```{r, message=FALSE, warning=FALSE}
+# install.packages("readr")
+library(readr)
+library(mosaic)
+CCCmasterdata <- read_csv("~/SDS291-Final-Project/Coffee Chocolate Chip Masterdata.csv")
+```
+
+
+## Structure and names
+
+```{r}
+str(CCCmasterdata, give.attr = FALSE)
+```
+
+There are 9 variables in the data, and 150 observations. The variables are:
+
+- Agriculture_value_added: value added by agriculture sector (unit: current US$)
+- Energy_Import: the percentage of imported energy in a nation’s total energy consumption
+- Energy_Efficiency: How much does a country’s GDP increase by consuming one kilogram of oil equivalent. (unit: PPP $ per kg of oil equivalent) 
+- Services_value_added: Value added by service sector (unit: current US$)
+- Renewable: the percentage of renewable energy in total final energy consumption (unit: %)
+- Industry_value_added: Value added by manufacturing sector (unit: current US$)
+- Income Level: is a dummy that equals 1 when a country is high or upper middle income; equals 0 if a country is low or lower middle income
+- Region: is a chr string of the region a country is in
+- GNI: Gross National Income (unit: current US$)
+
+
+## Variable analysis
+
+```{r}
+favstats(~Agriculture_value_added, data=CCCmasterdata)
+```
+
+Minimum number of agriculture value added is $ 115697262 and the maximum number is 3.33372e+12. It also has high standard deviation.
+
+```{r}
+favstats(~Energy_Import, data=CCCmasterdata)
+```
+
+It's a really big range from -582% to 98% of energy import, but we can expect that because some countries in the middle east do export a lot of energy and there are other countries heavily rely on energy import. We have 4 missing observations.
+
+```{r, eval=FALSE}
+favstats(~Energy_Efficiency , data=CCCmasterdata)
+```
+
+We have 4 missing observations here, but it's not a very big problem for us since we have 150+ observations and we can just delete the 4 observations.
+
+
+```{r, eval=FALSE}
+favstats(~Services_value_added , data=CCCmasterdata)
+```
+
+We have a huge standard deviation and it's reasonable because of the different level of economic development in different countries.
+
+```{r, eval=FALSE}
+favstats(~Renewable  , data=CCCmasterdata)
+```
+
+This shows the percentage of renewable energy in total energy use. Therefore the min of 0 and the max of 100 make sense.
+
+```{r, eval=FALSE}
+favstats(~Industry_value_added, data=CCCmasterdata)
+```
+
+Like value added in agriculture and service, the value added in industry (manufacturing) have big differences among countries, reflecting different level of development.
+
+```{r, eval=FALSE}
+favstats(~Income_Level, data=CCCmasterdata)
+```
+
+Income level is a dummy variable; therefore the min is 0 and the max is 1. The mean of 0.64 indicates 64% of the observations are in high or upper middle income level group.  
+
+```{r}
+favstats(~GNI, data=CCCmasterdata)
+```
+
+The GNI also indicates the level of development of a country, therefore there're also lots of dispersion in the data.
