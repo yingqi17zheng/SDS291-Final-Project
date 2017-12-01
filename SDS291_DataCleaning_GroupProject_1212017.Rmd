@@ -1,0 +1,63 @@
+---
+title: "291 data cleaning"
+author: "Yingqi Zheng"
+date: "11/8/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+require(tidyverse)
+require(dplyr)
+require(magrittr)
+library(readxl)
+Agriculture_value_added1 <- read_excel("~/SDS291-Final-Project/Agriculture value added1.xls")
+Energy_Efficiency1 <- read_excel("~/SDS291-Final-Project/Energy Efficiency1.xls")
+Energy_Import1 <- read_excel("~/SDS291-Final-Project/Energy Import1.xls")
+Income_Level1 <- read_excel("~/SDS291-Final-Project/Income Level1.xls")
+Industry_value_added1 <- read_excel("~/SDS291-Final-Project/Industry value added1.xls")
+Renewable_1 <- read_excel("~/SDS291-Final-Project/Renewable %1.xls")
+Services_value_added1 <- read_excel("~/SDS291-Final-Project/Services value added1.xls")
+GNI <- read_excel("~/SDS291-Final-Project/GNI.xls")
+```
+
+```{r}
+Masterdata <- subset(Agriculture_value_added1, select = c('Country Name', '2014'))
+colnames(Masterdata)[colnames(Masterdata) == "2014"] <- "Agriculture_value_added"
+Combine <- function(x,y) {data <- subset(x, select = c('Country Name', '2014'))
+                         colnames(data)[colnames(data) == "2014"] <- y
+                         Masterdata %>%
+                         inner_join(data, by = 'Country Name')}
+Masterdata <- Combine(Energy_Import1, "Energy_Import")
+
+```
+
+```{r}
+Masterdata <- Combine(Energy_Efficiency1,"Energy_Efficiency")
+Masterdata <- Combine(Services_value_added1,"Services_value_added")
+Masterdata <- Combine(Renewable_1,"Renewable")
+Masterdata <- Combine(Industry_value_added1,"Industry_value_added")
+colnames(Income_Level1)[colnames(Income_Level1) == "TableName"] <- 'Country Name'
+colnames(Income_Level1)[colnames(Income_Level1) == 'Income Level'] <- 'Income_Level'
+Income <- subset(Income_Level1, select = c('Income_Level','Country Name'))
+Masterdata <- Masterdata %>%
+    inner_join(Income, by = 'Country Name')
+Masterdata <- Combine(GNI,"GNI")
+
+```
+
+```{r message = FALSE}
+library(writexl)
+write_xlsx(Masterdata, "~/SDS291-Final-Project/Masterdata.xls")
+```
+
+
+ 
+ c(Energy_Efficiency1,Energy_Import1, Services_value_added1,Renewable_1,Industry_value_added1,Income_Level1)
+
+c("Energy_Efficiency","Energy_Import","Services_value_added", "Renewable","Industry_value_added","Income_Level")
+
+Masterdata <- Combine(Energy_Import1, "Energy_Import")
