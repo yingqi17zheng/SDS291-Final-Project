@@ -14,44 +14,50 @@ require(tidyverse)
 require(dplyr)
 require(magrittr)
 library(readxl)
-Agriculture_value_added1 <- read_excel("~/SDS291-Final-Project/Agriculture value added1.xls")
-Energy_Efficiency1 <- read_excel("~/SDS291-Final-Project/Energy Efficiency1.xls")
-Energy_Import1 <- read_excel("~/SDS291-Final-Project/Energy Import1.xls")
-Income_Level1 <- read_excel("~/SDS291-Final-Project/Income Level1.xls")
-Industry_value_added1 <- read_excel("~/SDS291-Final-Project/Industry value added1.xls")
-Renewable_1 <- read_excel("~/SDS291-Final-Project/Renewable %1.xls")
-Services_value_added1 <- read_excel("~/SDS291-Final-Project/Services value added1.xls")
-GNI <- read_excel("~/SDS291-Final-Project/GNI.xls")
+Agriculture<- read_excel("~/SDS291-Final-Project 2/Agriculture.xls")
+Energy_Eff<- read_excel("~/SDS291-Final-Project 2/Energy_Eff.xls")
+Energy_Import<- read_excel("~/SDS291-Final-Project 2/Energy_import.xls")
+Income_Level <- read_excel("~/SDS291-Final-Project 2/Income Level.xls")
+Industry <- read_excel("~/SDS291-Final-Project 2/Industry.xls")
+Renewable_pcent <- read_excel("~/SDS291-Final-Project 2/Renewable_pcent.xls")
+Service <- read_excel("~/SDS291-Final-Project 2/Service.xls")
+GNI <- read_excel("~/SDS291-Final-Project 2/GNI.xls")
+Emp_Pop <- read_excel("~/SDS291-Final-Project 2/emp_pop.xls")
+education_index<- read_excel("~/SDS291-Final-Project 2/education_index.xlsx")
 ```
 
 ```{r}
-Masterdata <- subset(Agriculture_value_added1, select = c('Country Name', '2014'))
-colnames(Masterdata)[colnames(Masterdata) == "2014"] <- "Agriculture_value_added"
+Masterdata <- subset(Agriculture, select = c('Country Name', '2014'))
+colnames(Masterdata)[colnames(Masterdata) == "2014"] <- "Agriculture"
 Combine <- function(x,y) {data <- subset(x, select = c('Country Name', '2014'))
                          colnames(data)[colnames(data) == "2014"] <- y
                          Masterdata %>%
                          inner_join(data, by = 'Country Name')}
-Masterdata <- Combine(Energy_Import1, "Energy_Import")
+Masterdata <- Combine(Energy_Import, "Energy_Import")
+
 
 ```
 
 ```{r}
-Masterdata <- Combine(Energy_Efficiency1,"Energy_Efficiency")
-Masterdata <- Combine(Services_value_added1,"Services_value_added")
-Masterdata <- Combine(Renewable_1,"Renewable")
-Masterdata <- Combine(Industry_value_added1,"Industry_value_added")
-colnames(Income_Level1)[colnames(Income_Level1) == "TableName"] <- 'Country Name'
-colnames(Income_Level1)[colnames(Income_Level1) == 'Income Level'] <- 'Income_Level'
-Income <- subset(Income_Level1, select = c('Income_Level','Country Name'))
+Masterdata <- Combine(Energy_Eff,"Energy_Eff")
+Masterdata <- Combine(Service,"Service")
+Masterdata <- Combine(Renewable_pcent,"Renewable")
+Masterdata <- Combine(Industry,"Industry")
+Masterdata <- Combine(Emp_Pop,"Emp_Pop")
+Masterdata <- Combine(education_index,"education_index")
+colnames(Income)[colnames(Income) == "TableName"] <- 'Country Name'
+colnames(Income)[colnames(Income) == 'Income Level'] <- 'Income_Level'
+Income <- subset(Income, select = c('Income_Level','Country Name'))
 Masterdata <- Masterdata %>%
     inner_join(Income, by = 'Country Name')
 Masterdata <- Combine(GNI,"GNI")
+MasterdataNNA <- na.omit(Masterdata)
 
 ```
 
 ```{r message = FALSE}
 library(writexl)
-write_xlsx(Masterdata, "~/SDS291-Final-Project/Masterdata.xls")
+write_xlsx(Masterdata, "~/SDS291-Final-Project 2/Masterdata 1212017.xls")
 ```
 
 
