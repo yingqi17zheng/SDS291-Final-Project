@@ -52,12 +52,11 @@ Masterdata <- Masterdata %>%
     inner_join(Income, by = 'Country Name')
 Masterdata <- Combine(GNI,"GNI")
 MasterdataNNA <- na.omit(Masterdata)
-
 ```
 
 ```{r message = FALSE}
 library(writexl)
-write_xlsx(Masterdata, "~/SDS291-Final-Project 2/Masterdata 1212017.xls")
+write_xlsx(MasterdataNNA, "~/SDS291-Final-Project 2/Masterdata 1212017.xls")
 ```
 
 
