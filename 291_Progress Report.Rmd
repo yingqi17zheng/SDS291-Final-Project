@@ -12,15 +12,53 @@ After receiving feedback on our data appendix, we include two more explanatory v
 require(tidyverse)
 require(dplyr)
 require(magrittr)
+require(car)
 library(readxl)
+Masterdata_1212017 <- read_excel("~/SDS291-Final-Project/Masterdata 1212017.xlsx")
+require(leaps)
+```
+
+
+```{r}
+Masterdata_1212017 <- Masterdata_1212017 %>%
+  mutate(Ind = Industry/GNI, Ser = Service/GNI)
+ 
+
+ Masterdata_1212017 %>%
+  select(c("Energy_Eff", "GNI", 'Renewable', 'Ind', 'Ser', 'Energy_Import', 'Income_Level', 'Education', 'Emp_Pop')) %>%
+  cor()
 ```
 
 ```{r}
-require(leaps)
-allsubset<-regsubsets(Energy_Efficiency ~ GNI + Renewable + Industry_value_added + Service_value_added + Energy_Import + Income_Level + Energy_Import*Renewable, data=FirstYearGPA)
+allsubset<-regsubsets(Energy_Eff ~ GNI + Renewable + Ind + Ser + Energy_Import + Income_Level + Education + Emp_Pop + GNI*Renewable + GNI*Energy_Import + GNI*Education + GNI*Emp_Pop + Renewable*Energy_Import + Renewable*Income_Level + Renewable*Education + Renewable*Emp_Pop + Ind*Ser + Ind*Energy_Import + Ind*Income_Level + Ind*Education + Ind*Emp_Pop + Ser*Energy_Import + Ser*Income_Level + Ser*Education + Ser*Emp_Pop + Energy_Import*Income_Level + Energy_Import*Education + Income_Level*Education + Income_Level*Emp_Pop + Education*Emp_Pop, data=Masterdata_1212017)
+
 plot(allsubset,scale="adjr2")
-summary(allsubset)$cp
 plot(allsubset,scale="Cp")
+
+which.max(summary(allsubset)$adjr2)
+summary(allsubset)$adjr2
+which.max(summary(allsubset)$cp)
+summary(allsubset)$cp
 
 ```
 
+Simple all subset: Renewable, Industry, Energy_Import, Income_Level
+All interaction R2: Renewable + Energy_Import + Emp_Pop + Renewable*Education + Ind*Energy_Import + Ind*Income_Level + Ser*Energy_Import + Income_Level*Emp_Pop
+
+aLL INTERACTION Cp: Renewable + Energy_Import + Education + Renewable*Education + Ind*Energy_Import + Ind*Income_Level + Ser*Energy_Import + Income_Level*Emp_Pop
+
+```{r}
+lmr2 <- lm(Energy_Eff ~ Renewable + Energy_Import + Emp_Pop + Renewable*Education + Ind*Energy_Import + Ind*Income_Level + Ser*Energy_Import + Income_Level*Emp_Pop, data=Masterdata_1212017)
+summary(lmr2)
+```
+plot(allsubset,scale="adjr2")
+summary(allsubset)
+summary(allsubset)$cp
+plot(allsubset,scale="Cp")
+
+
+```{r}
+lmcp <- lm(Energy_Eff ~ Renewable + Energy_Import + Education + Renewable*Education + Ind*Energy_Import + Ind*Income_Level + Ser*Energy_Import + Income_Level*Emp_Pop, data = Masterdata_1212017)
+summary(lmcp)
+```
+lm1 is better
