@@ -1,0 +1,26 @@
+---
+title: "1201_Progress Report"
+author: "Yingqi Zheng"
+date: "12/1/2017"
+output: html_document
+---
+
+After receiving feedback on our data appendix, we include two more explanatory variables in our dataset that control for demographic features in different countries. One is an education index calculated from the mean years of education of people in a country. We think that higher value in the education index might reflect a country’s level of development,  and also a better technological foundation to incorporate more renewable energy usage in daily life. The other variable we add to our dataset is percentage of people employed in total population. We think that a country’s total working population might be related to a country’s total consumption of energy. Perhaps a country with a greater proportion of working population will have higher energy usage efficiency, because people’s work can create more value to that country’s economic growth.
+
+
+```{r, echo = FALSE, message = FALSE}
+require(tidyverse)
+require(dplyr)
+require(magrittr)
+library(readxl)
+```
+
+```{r}
+require(leaps)
+allsubset<-regsubsets(Energy_Efficiency ~ GNI + Renewable + Industry_value_added + Service_value_added + Energy_Import + Income_Level + Energy_Import*Renewable, data=FirstYearGPA)
+plot(allsubset,scale="adjr2")
+summary(allsubset)$cp
+plot(allsubset,scale="Cp")
+
+```
+
