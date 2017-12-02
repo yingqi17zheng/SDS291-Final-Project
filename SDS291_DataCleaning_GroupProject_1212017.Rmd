@@ -23,7 +23,7 @@ Renewable_pcent <- read_excel("~/SDS291-Final-Project 2/Renewable_pcent.xls")
 Service <- read_excel("~/SDS291-Final-Project 2/Service.xls")
 GNI <- read_excel("~/SDS291-Final-Project 2/GNI.xls")
 Emp_Pop <- read_excel("~/SDS291-Final-Project 2/emp_pop.xls")
-education_index<- read_excel("~/SDS291-Final-Project 2/education_index.xlsx")
+Education<- read_excel("~/SDS291-Final-Project 2/education_index.xlsx")
 ```
 
 ```{r}
@@ -44,7 +44,7 @@ Masterdata <- Combine(Service,"Service")
 Masterdata <- Combine(Renewable_pcent,"Renewable")
 Masterdata <- Combine(Industry,"Industry")
 Masterdata <- Combine(Emp_Pop,"Emp_Pop")
-Masterdata <- Combine(education_index,"education_index")
+Masterdata <- Combine(Education,"Education")
 colnames(Income)[colnames(Income) == "TableName"] <- 'Country Name'
 colnames(Income)[colnames(Income) == 'Income Level'] <- 'Income_Level'
 Income <- subset(Income, select = c('Income_Level','Country Name'))
@@ -56,7 +56,7 @@ MasterdataNNA <- na.omit(Masterdata)
 
 ```{r message = FALSE}
 library(writexl)
-write_xlsx(MasterdataNNA, "~/SDS291-Final-Project 2/Masterdata 1212017.xls")
+write_xlsx(MasterdataNNA, "~/SDS291-Final-Project 2/Masterdata 1212017.xlsx")
 ```
 
 
